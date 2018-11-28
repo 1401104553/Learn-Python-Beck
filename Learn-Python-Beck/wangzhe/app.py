@@ -1,6 +1,8 @@
+from flask import Flask,render_template
 import requests
 import json
 import pymysql
+from flask_sqlalchemy import SQLAlchemy
 db = pymysql.connect("localhost","root","130270","wangzhe")
 
 cursor = db.cursor()
@@ -32,3 +34,10 @@ for m in range(len(jsonFile)):
     except:
         # 发生错误时回滚
         db.rollback()
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return render_template('index.html',hero_num=hero_num,hero_name=hero_name,hero_title=hero_title,hero_skin=hero_skin)
+if __name__ == '__main__':
+    app.run(debug=True)
