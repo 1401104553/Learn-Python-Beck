@@ -1,10 +1,10 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,request
 import requests
 import json
 import pymysql
-from flask_sqlalchemy import SQLAlchemy
-db = pymysql.connect("localhost","root","130270","wangzhe")
 
+
+db = pymysql.connect("localhost","root","130270","wangzhe")
 cursor = db.cursor()
 cursor.execute("DROP TABLE IF EXISTS HERO")
 sql = """CREATE TABLE HERO(
@@ -36,8 +36,19 @@ for m in range(len(jsonFile)):
         db.rollback()
 app = Flask(__name__)
 
+
 @app.route('/')
 def hello_world():
-    return render_template('index.html',hero_num=hero_num,hero_name=hero_name,hero_title=hero_title,hero_skin=hero_skin)
+    return render_template('index.html')
+
+
+@app.route('/record', methods=['POST'])
+def success():
+    if request.method == 'POST':
+        text = request.form['inner']
+        print(text)
+        return render_template('index.html', hero_num=text)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
